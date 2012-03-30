@@ -1,6 +1,7 @@
 from flask import Flask
 from flask import jsonify, render_template, redirect
 from flask import request
+from flask import Response
 app = Flask(__name__)
 
 import os, sys
@@ -14,7 +15,29 @@ from operator import itemgetter
 
 from reposadolib import reposadocommon
 
+from functools import wraps
+
+
+# Basic auth implementation modeled directly after guide at
+# http://flask.pocoo.org/snippets/8
+def check_auth(username, password):
+	'''Check if a username / password combination is valid.'''
+	return username == 'admin' and password == 'my_secret_password'
+
+def authenticate():
+	return Response("Couldn't verify your user/pass.", 401, {'WWW-Authenticate': 'Basic realm="Login required"'})
+
+def requires_auth(f):
+	@wraps(f)
+	def decorated(*args, **kwargs):
+		auth = request.authorization
+		if not auth or not check_auth(auth.username, auth.password):
+			return authenticate()
+		return f(*args, **kwargs)
+	return decorated
+
 @app.route('/')
+@requires_auth
 def index():
     return render_template('margarita.html')
 
@@ -45,6 +68,7 @@ def products():
 	return jsonify(result=sprodlist)
 
 @app.route('/new_branch/<branchname>', methods=['POST'])
+@requires_auth
 def new_branch(branchname):
     catalog_branches = reposadocommon.getCatalogBranches()
     if branchname in catalog_branches:
@@ -56,6 +80,7 @@ def new_branch(branchname):
     return jsonify(result='success')
 
 @app.route('/delete_branch/<branchname>', methods=['POST'])
+@requires_auth
 def delete_branch(branchname):
     catalog_branches = reposadocommon.getCatalogBranches()
     if not branchname in catalog_branches:
@@ -82,6 +107,7 @@ def delete_branch(branchname):
     return jsonify(result=True);
 
 @app.route('/add_all/<branchname>', methods=['POST'])
+@requires_auth
 def add_all(branchname):
 	products = reposadocommon.getProductInfo()
 	catalog_branches = reposadocommon.getCatalogBranches()
@@ -95,6 +121,7 @@ def add_all(branchname):
 
 
 @app.route('/process_queue', methods=['POST'])
+@requires_auth
 def process_queue():
     queue = json.loads(request.form['queue'])
 
