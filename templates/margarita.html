@@ -139,6 +139,30 @@
 <script id="update-row" type="text/template">
 <td>
 	<span title="Product ID: <%= id %>" class="info-toggle"><%= title %></span>
+	<% if (tiger) { %>
+		<span class="label label-info">10.4</span>
+	<% } %>
+	<% if (leopard) { %>
+		<span class="label label-info">10.5</span>
+	<% } %>
+	<% if (snowleopard) { %>
+		<span class="label label-info">10.6</span>
+	<% } %>
+	<% if (lion) { %>
+		<span class="label label-info">10.7</span>
+	<% } %>
+	<% if (mountainlion) { %>
+		<span class="label label-info">10.8</span>
+	<% } %>
+	<% if (mavericks) { %>
+		<span class="label label-info">10.9</span>
+	<% } %>
+	<% if (yosemite) { %>
+		<span class="label label-info">10.10</span>
+	<% } %>
+	<% if (seed) { %>
+		<span class="label">Pre</span>
+	<% } %>
 	<% if (depr) { %>
 		<span class="label label-warning">Deprecated</span>
 	<% } %>

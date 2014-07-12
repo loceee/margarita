@@ -82,6 +82,14 @@ def products():
 				'description': get_description_content(products[prodid]['description']),
 				'id': prodid,
 				'depr': len(products[prodid].get('AppleCatalogs', [])) < 1,
+				'seed': 'seed' in ''.join(products[prodid].get('OriginalAppleCatalogs', [])),
+				'yosemite': 'index-10.10' in ''.join(products[prodid].get('OriginalAppleCatalogs', [])),
+				'mavericks': 'index-10.9' in ''.join(products[prodid].get('OriginalAppleCatalogs', [])),
+				'mountainlion': 'index-mountainlion' in ''.join(products[prodid].get('OriginalAppleCatalogs', [])),
+				'lion': 'index-lion' in ''.join(products[prodid].get('OriginalAppleCatalogs', [])),
+				'snowleopard': 'index-leopard-snowleopard.merged-1.sucatalog' in ''.join(products[prodid].get('OriginalAppleCatalogs', [])),
+				'leopard': 'index-leopard.merged-1.sucatalog' in ''.join(products[prodid].get('OriginalAppleCatalogs', [])),
+				'tiger': 'index-1.sucatalog' in ''.join(products[prodid].get('OriginalAppleCatalogs', [])),
 				})
 		else:
 			print 'Invalid update!'

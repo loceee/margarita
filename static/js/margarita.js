@@ -262,6 +262,14 @@ var UpdatesTableView = Backbone.Marionette.CompositeView.extend({
 	appendHtml: function(collectionView, itemView) {
 		var show = false;
 		var depr = itemView.model.get('depr');
+		var seed = itemView.model.get('seed');
+		var yosemite = itemView.model.get('yosemite');
+		var mavericks = itemView.model.get('mavericks');
+		var mountainlion = itemView.model.get('mountainlion');
+		var lion = itemView.model.get('lion');
+		var snowleopard = itemView.model.get('snowleopard');
+		var leopard = itemView.model.get('leopard');
+		var tiger = itemView.model.get('tiger');
 
 		if (this.options.filterCriteria.get('hideCommon') == false || depr == true) {
 			// always show the update if not hiding common updates OR
