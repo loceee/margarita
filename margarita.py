@@ -34,6 +34,19 @@ def list_branches():
 
 	return json_response(branches)
 
+def get_packages_urls(p):
+    if not p.has_key('Packages'):
+        return None
+    packages = p['Packages']
+    if len(packages) == 0:
+        return None
+    
+    out=''
+    for p in packages:
+        out+="<a href='%s/%s'>%s</a> (%.2f Mb), " % (reposadocommon.pref('LocalCatalogURLBase'),p['URL'][p['URL'].index('/',9)+1:], p['URL'].split('/')[-1], p['Size']/1024./1024)
+    
+    return out[:-2]
+
 def get_description_content(html):
 	if len(html) == 0:
 		return None
@@ -80,6 +93,7 @@ def products():
 				'version': products[prodid]['version'],
 				'PostDate': products[prodid]['PostDate'].strftime('%Y-%m-%d'),
 				'description': get_description_content(products[prodid]['description']),
+				'packages': get_packages_urls(products[prodid]['CatalogEntry']),
 				'id': prodid,
 				'depr': len(products[prodid].get('AppleCatalogs', [])) < 1,
 				'seed': 'seed' in ''.join(products[prodid].get('OriginalAppleCatalogs', [])),
